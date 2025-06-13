@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Dashboard Scraping Mangas</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        font-family: "Roboto", Arial, sans-serif;
+        margin: 0;
+        background: linear-gradient(135deg, #e0e7ef 0%, #f7fafc 100%);
+        min-height: 100vh;
+      }
+      .container {
+        background: #fff;
+        padding: 38px 32px 32px 32px;
+        border-radius: 22px;
+        max-width: 520px;
+        margin: 56px auto 0 auto;
+        box-shadow: 0 8px 32px rgba(0, 123, 255, 0.13), 0 1.5px 4px #b0b0b0;
+        position: relative;
+        border-top: 8px solid #007bff;
+        border-bottom: 2px solid #e3e9f7;
+      }
+      h1 {
+        text-align: center;
+        font-size: 2.3rem;
+        font-weight: 700;
+        color: #007bff;
+        margin-bottom: 10px;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 8px #e3e9f7;
+      }
+      .subtitle {
+        text-align: center;
+        color: #555;
+        font-size: 1.08rem;
+        margin-bottom: 24px;
+        letter-spacing: 0.5px;
+      }
+      .actions {
+        display: flex;
+        justify-content: center;
+        gap: 18px;
+        margin-bottom: 22px;
+      }
+      button {
+        padding: 13px 30px;
+        font-size: 1.08rem;
+        border-radius: 8px;
+        border: none;
+        background: linear-gradient(90deg, #007bff 60%, #0056b3 100%);
+        color: #fff;
+        font-weight: 600;
+        cursor: pointer;
+        box-shadow: 0 2px 8px #e3e9f7;
+        transition: background 0.2s, transform 0.1s;
+        outline: none;
+      }
+      button:disabled {
+        background: #b0b0b0;
+        color: #eee;
+        cursor: not-allowed;
+      }
+      .input-group {
+        display: flex;
+        gap: 10px;
+        margin: 24px 0 18px 0;
+        align-items: center;
+      }
+      input[type="text"] {
+        padding: 12px 14px;
+        width: 100%;
+        font-size: 1.08rem;
+        border-radius: 7px;
+        border: 1.5px solid #cfd8dc;
+        background: #f7faff;
+        transition: border 0.2s, box-shadow 0.2s;
+        box-shadow: 0 1px 4px #e3e9f7;
+      }
+      input[type="text"]:focus {
+        border: 1.5px solid #007bff;
+        outline: none;
+        background: #fff;
+        box-shadow: 0 2px 8px #b3d1ff;
+      }
+      .file-list {
+        background: #f4f8fb;
+        padding: 18px 20px 10px 20px;
+        border-radius: 10px;
+        margin-top: 18px;
+        box-shadow: 0 1px 4px #e3e9f7;
+        border-left: 4px solid #007bff;
+      }
+      .file-list strong {
+        color: #007bff;
+        font-size: 1.08rem;
+        letter-spacing: 0.5px;
+      }
+      .file-list ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+      .file-list li {
+        margin: 7px 0;
+        font-size: 1.04rem;
+        color: #333;
+        padding-left: 8px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background: #eaf2fb;
+        border-radius: 6px;
+        padding: 7px 10px 7px 32px;
+        box-shadow: 0 1px 2px #e3e9f7;
+        transition: background 0.2s;
+      }
+      .file-list li:before {
+        content: "📄";
+        position: absolute;
+        left: 8px;
+        font-size: 1.1em;
+        top: 8px;
+      }
+      .file-list li span {
+        flex: 1;
+        color: #333;
+        font-size: 1.04rem;
+      }
+      .delete-btn {
+        background: none;
+        border: none;
+        color: #d32f2f;
+        font-size: 1.2em;
+        margin-left: 12px;
+        cursor: pointer;
+        vertical-align: middle;
+        transition: color 0.2s, transform 0.1s;
+      }
+      .delete-btn:hover {
+        color: #b71c1c;
+        text-shadow: 0 1px 2px #f8bbd0;
+        transform: scale(1.15);
+      }
+      .status {
+        margin: 18px 0 0 0;
+        color: #007bff;
+        font-weight: 700;
+        text-align: center;
+        min-height: 24px;
+        font-size: 1.12rem;
+        letter-spacing: 0.5px;
+      }
+      .logs-section {
+        margin-top: 32px;
+        border-left: 4px solid #007bff;
+        background: #f4f8fb;
+        border-radius: 10px;
+        box-shadow: 0 1px 4px #e3e9f7;
+        padding: 18px 20px 10px 20px;
+      }
+      .logs-section strong {
+        color: #007bff;
+        font-size: 1.08rem;
+      }
+      pre {
+        background: #181c2f;
+        color: #e0e6f7;
+        padding: 16px 14px;
+        border-radius: 8px;
+        max-height: 320px;
+        overflow: auto;
+        font-size: 1.01rem;
+        margin-top: 10px;
+        font-family: "Fira Mono", "Consolas", monospace;
+        box-shadow: 0 1px 4px #e3e9f7;
+      }
+      @media (max-width: 600px) {
+        .container {
+          padding: 12px 2vw 12px 2vw;
+          max-width: 99vw;
+        }
+        h1 {
+          font-size: 1.3rem;
+        }
+        button {
+          padding: 10px 10px;
+          font-size: 0.95rem;
+        }
+        .file-list,
+        .logs-section {
+          padding: 10px 4vw 8px 4vw;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Dashboard Scraping Mangas</h1>
+      <div class="subtitle">
+        Pilotez le scraping, la migration et la gestion de vos fichiers mangas
+        en toute simplicité
+      </div>
+      <div class="actions">
+        <button id="startBtn">Lancer le scraping</button>
+        <button id="stopBtn">Arrêter le scraping</button>
+      </div>
+      <div class="input-group">
+        <input
+          type="text"
+          id="filename"
+          placeholder="Nom du fichier JSON à migrer (ex: manga-h-16-27-41-d-12-06-2025.json)"
+        />
+        <button id="migrateBtn">Migrer ce fichier</button>
+      </div>
+      <div class="file-list">
+        <strong>5 derniers fichiers JSON scrapés :</strong>
+        <ul id="lastFiles">
+          {% for file in last_files %}
+          <li>
+            <span>{{ file }}</span>
+            <button
+              class="delete-btn"
+              data-filename="{{ file }}"
+              title="Supprimer ce fichier"
+            >
+              🗑️
+            </button>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="status" id="status"></div>
+      <div class="file-list logs-section">
+        <strong>Logs (scraping & migration) :</strong>
+        <pre id="logs"></pre>
+      </div>
+    </div>
+    <script>
+      function refreshLastFiles() {
+        fetch("/last_files")
+          .then((r) => r.json())
+          .then((data) => {
+            let ul = document.getElementById("lastFiles");
+            ul.innerHTML = "";
+            data.files.forEach((f) => {
+              let li = document.createElement("li");
+              let span = document.createElement("span");
+              span.textContent = f;
+              let btn = document.createElement("button");
+              btn.className = "delete-btn";
+              btn.title = "Supprimer ce fichier";
+              btn.textContent = "🗑️";
+              btn.setAttribute("data-filename", f);
+              btn.onclick = function () {
+                if (confirm("Supprimer le fichier '" + f + "' ?")) {
+                  fetch("/delete_file", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ filename: f }),
+                  })
+                    .then((r) => r.json())
+                    .then((data) => {
+                      if (data.status === "success") {
+                        refreshLastFiles();
+                        document.getElementById("status").textContent =
+                          "Fichier supprimé.";
+                      } else {
+                        document.getElementById("status").textContent =
+                          "Erreur suppression : " +
+                          (data.message || data.status);
+                      }
+                    });
+                }
+              };
+              li.appendChild(span);
+              li.appendChild(btn);
+              ul.appendChild(li);
+            });
+          });
+      }
+      function refreshLogs() {
+        fetch("/logs")
+          .then((r) => r.json())
+          .then((data) => {
+            document.getElementById("logs").textContent = data.logs || "";
+          });
+      }
+      document.getElementById("startBtn").onclick = function () {
+        fetch("/start_scraping", { method: "POST" })
+          .then((r) => r.json())
+          .then((data) => {
+            document.getElementById("status").textContent =
+              data.status === "started" ? "Scraping lancé..." : "Déjà en cours";
+            setTimeout(refreshLogs, 1000);
+          });
+      };
+      document.getElementById("stopBtn").onclick = function () {
+        fetch("/stop_scraping", { method: "POST" })
+          .then((r) => r.json())
+          .then((data) => {
+            document.getElementById("status").textContent =
+              "Arrêt du scraping demandé.";
+            setTimeout(refreshLogs, 1000);
+          });
+      };
+      document.getElementById("migrateBtn").onclick = function () {
+        let filename = document.getElementById("filename").value;
+        if (!filename) {
+          document.getElementById("status").textContent =
+            "Veuillez renseigner le nom du fichier.";
+          return;
+        }
+        let formData = new FormData();
+        formData.append("filename", filename);
+        fetch("/migrate", { method: "POST", body: formData })
+          .then((r) => r.json())
+          .then((data) => {
+            if (data.status === "success") {
+              document.getElementById("status").textContent =
+                "Migration réussie !";
+            } else {
+              document.getElementById("status").textContent =
+                "Erreur : " + (data.message || data.status);
+            }
+            setTimeout(refreshLogs, 1000);
+          });
+      };
+      setInterval(refreshLastFiles, 10000);
+      setInterval(refreshLogs, 5000);
+      window.onload = function () {
+        refreshLogs();
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+python-dotenv>=0.19.0
+requests>=2.26.0
+beautifulsoup4>=4.10.0
+Flask==3.1.0
+---
+description: Stack pour le projet web
+globs: 
+---
+## Backend
+Flask pour les vues qui retournent les données JSON.
+
+## Frontend
+DaisyUI pour les composants d'interface
+
+Les templates Flask JavaScript pour les interactions
