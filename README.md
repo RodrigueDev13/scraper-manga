@@ -1,4 +1,4 @@
-# Scrapper Cinéma Web
+# Scrapper Cinéma Web | Manga Web
 
 Application web pour afficher les horaires des cinémas, avec un scraper automatique pour récupérer les données.
 
